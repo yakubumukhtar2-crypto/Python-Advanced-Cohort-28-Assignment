@@ -27,6 +27,7 @@ def add_visitor(filename, name):
     except Exception as e:
         print(f"Error writing to file: {e}")
 
+
 def main():
     filename = "visitors.txt"
     try:
