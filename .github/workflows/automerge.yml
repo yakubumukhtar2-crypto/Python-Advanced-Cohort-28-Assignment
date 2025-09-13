@@ -12,9 +12,18 @@ jobs:
   auto-merge:
     runs-on: ubuntu-latest
     steps:
+      - name: Select Token
+        id: select-token
+        run: |
+          if [[ "${{ github.event.pull_request.head.repo.full_name }}" == "${{ github.repository }}" ]]; then
+            echo "token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+          else
+            echo "token=${{ secrets.PAT_TOKEN }}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Enable auto-merge
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.select-token.outputs.token }}
           pull-request-number: ${{ github.event.pull_request.number }}
           merge-method: squash
